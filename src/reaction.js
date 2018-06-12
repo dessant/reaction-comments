@@ -85,7 +85,9 @@ ${commentBody}
       GhResource.editComment({...commentParams, body: editedComment})
     );
 
-    await this.getStorage(`comments/${payload.repository.id}`).push({
+    await this.getStorage(
+      `comments/${payload.installation.id}/${payload.repository.id}`
+    ).push({
       dt: Date.now(),
       isReviewComment,
       commentId,
@@ -97,7 +99,9 @@ ${commentBody}
     const {only: type} = this.config;
     const {payload, github} = this.context;
 
-    const commentsRef = this.getStorage(`comments/${payload.repository.id}`);
+    const commentsRef = this.getStorage(
+      `comments/${payload.installation.id}/${payload.repository.id}`
+    );
     const comments = await commentsRef.limitToFirst(100).once('value');
 
     const outdatedComments = [];

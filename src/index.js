@@ -36,25 +36,30 @@ module.exports = robot => {
   });
 
   robot.on('installation.deleted', async context => {
-    await removeRepositories(context.payload.repositories);
+    await removeInstallation(context.payload.installation.id);
   });
 
   robot.on('installation_repositories.removed', async context => {
-    await removeRepositories(context.payload.repositories_removed);
+    await removeRepositories(
+      context.payload.installation.id,
+      context.payload.repositories_removed
+    );
   });
 
-  async function removeRepositories(repos) {
-    if (repos.length) {
-      repos.forEach(item => scheduler.stop(item));
+  async function removeInstallation(installationId) {
+    await App.getStorageStatic(db, `comments/${installationId}`).remove();
+  }
 
-      await App.getStorageStatic(db, 'comments').update(
-        Object.assign(
-          ...repos.map(function(item) {
-            return {[item.id]: null};
-          })
-        )
-      );
-    }
+  async function removeRepositories(installationId, repos) {
+    repos.forEach(item => scheduler.stop(item));
+
+    await App.getStorageStatic(db, `comments/${installationId}`).update(
+      Object.assign(
+        ...repos.map(function(item) {
+          return {[item.id]: null};
+        })
+      )
+    );
   }
 
   async function getApp(context) {
