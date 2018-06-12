@@ -1,0 +1,55 @@
+{
+  "name": "reaction-comments",
+  "version": "0.1.0",
+  "description": "A GitHub App built with Probot that deletes new +1 comments and teaches users about GitHub reactions.",
+  "author": "Armin Sebastian",
+  "license": "MIT",
+  "repository": {
+    "url": "https://github.com/dessant/reaction-comments.git",
+    "type": "git"
+  },
+  "bugs": "https://github.com/dessant/reaction-comments/issues",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "probot run ./src/index.js",
+    "watch": "nodemon --exec 'npm start'",
+    "update": "ncu --upgrade --upgradeAll && yarn",
+    "push": "git push --follow-tags origin master",
+    "release": "standard-version && yarn run push"
+  },
+  "files": [
+    "docs",
+    "src"
+  ],
+  "dependencies": {
+    "firebase-admin": "^5.12.1",
+    "joi": "^13.4.0",
+    "probot": "^6.2.0",
+    "probot-config": "^0.1.0",
+    "probot-scheduler": "^1.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "1.17.5",
+    "npm-check-updates": "^2.14.2",
+    "smee-client": "^1.0.1",
+    "standard-version": "^4.4.0"
+  },
+  "engines": {
+    "node": "^8.9",
+    "npm": "^5.6"
+  },
+  "keywords": [
+    "github",
+    "issues",
+    "pull requests",
+    "+1",
+    "comments",
+    "reactions",
+    "github reactions",
+    "automation",
+    "github app",
+    "probot",
+    "probot app",
+    "bot"
+  ]
+}

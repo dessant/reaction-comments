@@ -1,0 +1,208 @@
+const reactionRx = /^(?:\s*(?:\+1|-1|:(?:\+1|-1|thumbsup|thumbsdown|smile|tada|confused|heart):|\u{1f44d}(?:\u{1f3fb}|\u{1f3fc}|\u{1f3fd}|\u{1f3fe}|\u{1f3ff})?|\u{1f44e}(?:\u{1f3fb}|\u{1f3fc}|\u{1f3fd}|\u{1f3fe}|\u{1f3ff})?|\u{1f604}|\u{1f389}|\u{1f615}|\u{2764}\u{fe0f})\s*)+$/u;
+
+module.exports = class Reaction {
+  constructor(context, config, logger, db) {
+    this.context = context;
+    this.config = config;
+    this.logger = logger;
+    this.db = db;
+  }
+
+  async comment() {
+    const {only: type} = this.config;
+    const {isBot, payload, github} = this.context;
+    const {owner, repo, number: issue} = this.context.issue();
+
+    if (isBot || (type === 'issues' && payload.issue.pull_request)) {
+      return;
+    }
+
+    const exemptLabels = this.getConfigValue(type, 'exemptLabels');
+    for (const label of exemptLabels) {
+      if (payload.issue.labels.includes(label)) {
+        return;
+      }
+    }
+
+    const commentId = payload.comment.id;
+    const commentParams = {
+      owner,
+      repo,
+      comment_id: commentId
+    };
+    const commentBody = payload.comment.body;
+    if (!reactionRx.test(commentBody)) {
+      return;
+    }
+
+    const {data: issueData} = await github.issues.get({
+      owner,
+      repo,
+      number: issue,
+      headers: {
+        Accept: 'application/vnd.github.sailor-v-preview+json'
+      }
+    });
+    const lock = {
+      active: issueData.locked,
+      reason: issueData.active_lock_reason
+    };
+
+    let reactionComment = this.getConfigValue(type, 'reactionComment');
+    const isReviewComment = payload.comment.hasOwnProperty('commit_id');
+    const GhResource = isReviewComment ? github.pullRequests : github.issues;
+
+    if (!reactionComment) {
+      this.logger.info({issue, ...commentParams}, 'Deleting comment');
+      await this.ensureUnlock({owner, repo, number: issue}, lock, () =>
+        GhResource.deleteComment(commentParams)
+      );
+      return;
+    }
+
+    reactionComment = reactionComment.replace(
+      /{user}/,
+      payload.comment.user.login
+    );
+
+    const editedComment = `${reactionComment}
+
+<h6>
+<details>
+<!--notice-->
+<summary>
+This comment is scheduled for deletion. Click here to view the original content.
+</summary>
+</br>
+
+${commentBody}
+</details>
+</h6>
+`;
+
+    this.logger.info({issue, ...commentParams}, 'Editing comment');
+    await this.ensureUnlock({owner, repo, number: issue}, lock, () =>
+      GhResource.editComment({...commentParams, body: editedComment})
+    );
+
+    await this.getStorage(`comments/${payload.repository.id}`).push({
+      dt: Date.now(),
+      isReviewComment,
+      commentId,
+      issue
+    });
+  }
+
+  async delete() {
+    const {only: type} = this.config;
+    const {payload, github} = this.context;
+
+    const commentsRef = this.getStorage(`comments/${payload.repository.id}`);
+    const comments = await commentsRef.limitToFirst(100).once('value');
+
+    const outdatedComments = [];
+    comments.forEach(item => {
+      const comment = item.val();
+      // delete comments older than a day
+      if (comment.dt < Date.now() - 86400000) {
+        outdatedComments.push({dbKey: item.key, ...comment});
+      } else {
+        return true;
+      }
+    });
+
+    if (outdatedComments.length) {
+      const {owner, repo} = this.context.repo();
+      for (const comment of outdatedComments) {
+        const commentParams = {
+          owner,
+          repo,
+          comment_id: comment.commentId
+        };
+        const GhResource = comment.isReviewComment
+          ? github.pullRequests
+          : github.issues;
+
+        let commentData;
+        try {
+          commentData = (await GhResource.getComment(commentParams)).data;
+        } catch (e) {
+          if (e.code === 404) {
+            continue;
+          }
+          throw e;
+        }
+        const commentBody = commentData.body;
+        if (/<!--notice-->/.test(commentBody) || reactionRx.test(commentBody)) {
+          const issue = comment.issue;
+          const {data: issueData} = await github.issues.get({
+            owner,
+            repo,
+            number: issue,
+            headers: {
+              Accept: 'application/vnd.github.sailor-v-preview+json'
+            }
+          });
+          const lock = {
+            active: issueData.locked,
+            reason: issueData.active_lock_reason
+          };
+
+          this.logger.info({issue, ...commentParams}, 'Deleting comment');
+          await this.ensureUnlock({owner, repo, number: issue}, lock, () =>
+            GhResource.deleteComment(commentParams)
+          );
+        }
+      }
+
+      await commentsRef.update(
+        Object.assign(
+          ...outdatedComments.map(function(item) {
+            return {[item.dbKey]: null};
+          })
+        )
+      );
+    }
+  }
+
+  static getStorageStatic(db, path) {
+    if (process.env.NODE_ENV !== 'production') {
+      path = `dev/${path}`;
+    }
+    return db.ref(path);
+  }
+
+  getStorage(path) {
+    return Reaction.getStorageStatic(this.db, path);
+  }
+
+  async ensureUnlock(issue, lock, action) {
+    if (lock.active) {
+      await this.context.github.issues.unlock(issue);
+      await action();
+      if (lock.reason) {
+        issue = {
+          ...issue,
+          lock_reason: lock.reason,
+          headers: {
+            Accept: 'application/vnd.github.sailor-v-preview+json'
+          }
+        };
+      }
+      await this.context.github.issues.lock(issue);
+    } else {
+      await action();
+    }
+  }
+
+  getConfigValue(type, key) {
+    if (
+      type &&
+      this.config[type] &&
+      typeof this.config[type][key] !== 'undefined'
+    ) {
+      return this.config[type][key];
+    }
+    return this.config[key];
+  }
+};
