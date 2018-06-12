@@ -10,7 +10,7 @@ and deletes *new* reaction comments, such as +1.
 
 The ongoing development of Reaction Comments is made possible
 thanks to the support of awesome backers. If you'd like to join them,
-please consider contributing with Patreon](https://goo.gl/qRhKSW),
+please consider contributing with [Patreon](https://goo.gl/qRhKSW),
 [PayPal](https://goo.gl/5FnBaw) or [Bitcoin](https://goo.gl/uJUAaU).
 
 ## How It Works
