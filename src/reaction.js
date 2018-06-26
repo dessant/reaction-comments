@@ -6,14 +6,14 @@ module.exports = class Reaction {
   constructor(context, config, logger, db) {
     this.context = context;
     this.config = config;
-    this.logger = logger;
+    this.log = logger;
     this.db = db;
   }
 
   async comment() {
     const {only: type} = this.config;
     const {isBot, payload, github} = this.context;
-    const {owner, repo, number: issue} = this.context.issue();
+    const issue = this.context.issue();
 
     if (isBot || (type === 'issues' && payload.issue.pull_request)) {
       return;
@@ -28,8 +28,8 @@ module.exports = class Reaction {
 
     const commentId = payload.comment.id;
     const commentParams = {
-      owner,
-      repo,
+      owner: issue.owner,
+      repo: issue.repo,
       comment_id: commentId
     };
     const commentBody = payload.comment.body;
@@ -38,9 +38,7 @@ module.exports = class Reaction {
     }
 
     const {data: issueData} = await github.issues.get({
-      owner,
-      repo,
-      number: issue,
+      ...issue,
       headers: {
         Accept: 'application/vnd.github.sailor-v-preview+json'
       }
@@ -55,8 +53,8 @@ module.exports = class Reaction {
     const GhResource = isReviewComment ? github.pullRequests : github.issues;
 
     if (!reactionComment) {
-      this.logger.info({issue, ...commentParams}, 'Deleting comment');
-      await this.ensureUnlock({owner, repo, number: issue}, lock, () =>
+      this.log.info({issue, commentId}, 'Deleting comment');
+      await this.ensureUnlock(issue, lock, () =>
         GhResource.deleteComment(commentParams)
       );
       return;
@@ -83,8 +81,8 @@ module.exports = class Reaction {
       </h6>
     `;
 
-    this.logger.info({issue, ...commentParams}, 'Editing comment');
-    await this.ensureUnlock({owner, repo, number: issue}, lock, () =>
+    this.log.info({issue, commentId}, 'Editing comment');
+    await this.ensureUnlock(issue, lock, () =>
       GhResource.editComment({...commentParams, body: editedComment})
     );
 
@@ -94,7 +92,7 @@ module.exports = class Reaction {
       dt: Date.now(),
       isReviewComment,
       commentId,
-      issue
+      issue: issue.number
     });
   }
 
@@ -141,11 +139,9 @@ module.exports = class Reaction {
         }
         const commentBody = commentData.body;
         if (/<!--notice-->/.test(commentBody) || reactionRx.test(commentBody)) {
-          const issue = comment.issue;
+          const issue = {owner, repo, number: comment.issue};
           const {data: issueData} = await github.issues.get({
-            owner,
-            repo,
-            number: issue,
+            ...issue,
             headers: {
               Accept: 'application/vnd.github.sailor-v-preview+json'
             }
@@ -155,8 +151,11 @@ module.exports = class Reaction {
             reason: issueData.active_lock_reason
           };
 
-          this.logger.info({issue, ...commentParams}, 'Deleting comment');
-          await this.ensureUnlock({owner, repo, number: issue}, lock, () =>
+          this.log.info(
+            {issue, commentId: comment.commentId},
+            'Deleting comment'
+          );
+          await this.ensureUnlock(issue, lock, () =>
             GhResource.deleteComment(commentParams)
           );
         }

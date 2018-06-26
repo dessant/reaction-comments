@@ -1,3 +1,4 @@
+const uuidV4 = require('uuid/v4');
 const firebase = require('firebase-admin');
 const createScheduler = require('probot-scheduler');
 const getMergedConfig = require('probot-config');
@@ -5,12 +6,15 @@ const getMergedConfig = require('probot-config');
 const App = require('./reaction');
 const schema = require('./schema');
 
-module.exports = robot => {
-  firebase.initializeApp({
+module.exports = async robot => {
+  const firebaseApp = firebase.initializeApp({
     credential: firebase.credential.cert(process.env.FIREBASE_KEY_PATH),
     databaseURL: process.env.FIREBASE_DB_URL
   });
-  const db = firebase.database();
+  const db = firebaseApp.database();
+
+  const github = await robot.auth();
+  const appName = (await github.apps.get({})).data.name;
 
   const scheduler = createScheduler(robot);
 
@@ -63,26 +67,28 @@ module.exports = robot => {
   }
 
   async function getApp(context) {
-    const config = await getConfig(context);
-    if (config) {
-      return new App(context, config, robot.log, db);
+    const logger = context.log.child({appName, session: uuidV4()});
+    const config = await getConfig(context, logger);
+    if (config && config.perform) {
+      return new App(context, config, logger, db);
     }
   }
 
-  async function getConfig(context) {
-    const {owner, repo} = context.repo();
+  async function getConfig(context, log, file = 'reaction.yml') {
     let config;
+    const repo = context.repo();
     try {
-      const repoConfig = await getMergedConfig(context, 'reaction.yml');
-      if (repoConfig) {
-        const {error, value} = schema.validate(repoConfig);
-        if (error) {
-          throw error;
-        }
-        config = value;
+      let repoConfig = await getMergedConfig(context, file);
+      if (!repoConfig) {
+        repoConfig = {perform: false};
       }
+      const {error, value} = schema.validate(repoConfig);
+      if (error) {
+        throw error;
+      }
+      config = value;
     } catch (err) {
-      robot.log.warn({err: new Error(err), owner, repo}, 'Invalid config');
+      log.warn({err: new Error(err), repo, file}, 'Invalid config');
     }
 
     return config;
