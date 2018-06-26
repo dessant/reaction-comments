@@ -61,7 +61,7 @@ module.exports = class Reaction {
     }
 
     reactionComment = reactionComment.replace(
-      /{user}/,
+      /{(?:user|comment-author)}/,
       payload.comment.user.login
     );
 

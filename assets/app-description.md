@@ -22,10 +22,11 @@ Create `.github/reaction.yml` in the default branch to enable the app. The file 
 # Set to `[]` to disable
 exemptLabels: []
 
-# Replace matching comments with this message, `{user}` is a placeholder
-# for the comment author. Set to `false` to disable
+# Replace matching comments with this message, `{comment-author}` is an
+# optional placeholder. Set to `false` to disable
 reactionComment: >
-  :wave: @{user}, did you mean to use a [reaction](https://git.io/vhzhC) instead?
+  :wave: @{comment-author}, did you mean to use
+  a [reaction](https://git.io/vhzhC) instead?
 
 # Limit to only `issues` or `pulls`
 # only: issues

@@ -40,10 +40,11 @@ The file can be empty, or it can override any of these default settings:
 # Set to `[]` to disable
 exemptLabels: []
 
-# Replace matching comments with this message, `{user}` is a placeholder
-# for the comment author. Set to `false` to disable
+# Replace matching comments with this message, `{comment-author}` is an
+# optional placeholder. Set to `false` to disable
 reactionComment: >
-  :wave: @{user}, did you mean to use a [reaction](https://git.io/vhzhC) instead?
+  :wave: @{comment-author}, did you mean to use
+  a [reaction](https://git.io/vhzhC) instead?
 
 # Limit to only `issues` or `pulls`
 # only: issues
