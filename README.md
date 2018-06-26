@@ -3,8 +3,8 @@
 [![npm](https://img.shields.io/npm/v/reaction-comments.svg?style=flat-square&colorB=007EC6)](https://www.npmjs.com/package/reaction-comments)
 
 Reaction Comments is a GitHub App built with [Probot](https://github.com/probot/probot)
-that teaches users about the correct use of GitHub reactions,
-and deletes *new* reaction comments, such as +1.
+that educates users about GitHub reactions, and deletes reaction comments,
+such as +1.
 
 ![](assets/screenshot.png)
 

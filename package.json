@@ -1,7 +1,7 @@
 {
   "name": "reaction-comments",
   "version": "0.1.1",
-  "description": "A GitHub App built with Probot that deletes new +1 comments and teaches users about GitHub reactions.",
+  "description": "A GitHub App built with Probot that deletes +1 comments.",
   "author": "Armin Sebastian",
   "license": "MIT",
   "repository": {
