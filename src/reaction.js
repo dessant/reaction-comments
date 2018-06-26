@@ -1,3 +1,5 @@
+const dedent = require('dedent');
+
 const reactionRx = /^(?:\s*(?:\+1|-1|:(?:\+1|-1|thumbsup|thumbsdown|smile|tada|confused|heart):|\u{1f44d}(?:\u{1f3fb}|\u{1f3fc}|\u{1f3fd}|\u{1f3fe}|\u{1f3ff})?|\u{1f44e}(?:\u{1f3fb}|\u{1f3fc}|\u{1f3fd}|\u{1f3fe}|\u{1f3ff})?|\u{1f604}|\u{1f389}|\u{1f615}|\u{2764}\u{fe0f})\s*)+$/u;
 
 module.exports = class Reaction {
@@ -65,20 +67,21 @@ module.exports = class Reaction {
       payload.comment.user.login
     );
 
-    const editedComment = `${reactionComment}
+    const editedComment = dedent`
+      ${reactionComment}
 
-<h6>
-<details>
-<!--notice-->
-<summary>
-This comment is scheduled for deletion. Click here to view the original content.
-</summary>
-</br>
+      <h6>
+      <details>
+      <!--notice-->
+      <summary>
+      This comment is scheduled for deletion. Click here to view the original content.
+      </summary>
+      </br>
 
-${commentBody}
-</details>
-</h6>
-`;
+      ${commentBody}
+      </details>
+      </h6>
+    `;
 
     this.logger.info({issue, ...commentParams}, 'Editing comment');
     await this.ensureUnlock({owner, repo, number: issue}, lock, () =>

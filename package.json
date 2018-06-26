@@ -22,6 +22,7 @@
     "src"
   ],
   "dependencies": {
+    "dedent": "^0.7.0",
     "firebase-admin": "^5.12.1",
     "joi": "^13.4.0",
     "probot": "^6.2.0",
