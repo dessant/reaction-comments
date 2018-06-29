@@ -25,7 +25,7 @@ or it is deleted immediately, if `reactionComment` is set to `false`.
 ## Usage
 
 1. **[Install the GitHub App](https://github.com/apps/reaction)**
-   for the required repositories
+   for the intended repositories
 2. Create `.github/reaction.yml` based on the template below
 
 #### Configuration

@@ -8,7 +8,7 @@ The app detects if a new comment consists solely of emojis and shortcodes used i
 
 ## Usage
 
-1. **[Install the GitHub App](https://github.com/apps/reaction)** for the required repositories
+1. **[Install the GitHub App](https://github.com/apps/reaction)** for the intended repositories
 2. Create `.github/reaction.yml` based on the template below
 
 #### Configuration
