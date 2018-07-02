@@ -1,4 +1,4 @@
-A GitHub App that deletes +1 comments and educates users about GitHub reactions.
+A GitHub App that deletes +1 comments, and encourages the use of GitHub reactions.
 
 ![](https://raw.githubusercontent.com/dessant/reaction-comments/master/assets/screenshot.png)
 
