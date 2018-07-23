@@ -1,6 +1,6 @@
 {
   "name": "reaction-comments",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A GitHub App built with Probot that deletes +1 comments.",
   "author": "Armin Sebastian",
   "license": "MIT",
