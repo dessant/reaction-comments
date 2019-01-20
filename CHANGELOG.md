@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.3.2"></a>
+## [0.3.2](https://github.com/dessant/reaction-comments/compare/v0.3.1...v0.3.2) (2019-01-20)
+
+
+### Bug Fixes
+
+* apply stricter config validation ([8eb0cf9](https://github.com/dessant/reaction-comments/commit/8eb0cf9))
+* respect exemptLabels config option ([c62b168](https://github.com/dessant/reaction-comments/commit/c62b168))
+
+
+
 <a name="0.3.1"></a>
 ## [0.3.1](https://github.com/dessant/reaction-comments/compare/v0.3.0...v0.3.1) (2018-10-03)
 
