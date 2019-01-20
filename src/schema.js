@@ -9,7 +9,8 @@ const fields = {
         .max(50)
     )
     .description(
-      'Issues and pull requests with these labels accept reaction comments. Set to `[]` to disable'
+      'Issues and pull requests with these labels accept reaction comments. ' +
+        'Set to `[]` to disable'
     ),
 
   reactionComment: Joi.alternatives()
@@ -20,14 +21,16 @@ const fields = {
       Joi.boolean().only(false)
     )
     .description(
-      'Replace matching comments with this message, `{user}` is a placeholder for the comment author. Set to `false` to disable'
+      'Replace matching comments with this message, `{comment-author}` ' +
+        'is an optional placeholder. Set to `false` to disable'
     )
 };
 
 const schema = Joi.object().keys({
   exemptLabels: fields.exemptLabels.default([]),
   reactionComment: fields.reactionComment.default(
-    ':wave: @{user}, did you mean to use a [reaction](https://git.io/vhzhC) instead?'
+    ':wave: @{comment-author}, did you mean to use ' +
+      'a [reaction](https://git.io/vhzhC) instead?'
   ),
   only: Joi.string()
     .trim()

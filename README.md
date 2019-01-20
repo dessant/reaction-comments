@@ -13,8 +13,8 @@ reactions.
 
 The continued development of Reaction Comments is made possible
 thanks to the support of awesome backers. If you'd like to join them,
-please consider contributing with [Patreon](https://goo.gl/qRhKSW),
-[PayPal](https://goo.gl/5FnBaw) or [Bitcoin](https://goo.gl/uJUAaU).
+please consider contributing with [Patreon](https://www.patreon.com/dessant),
+[PayPal](https://www.paypal.me/ArminSebastian) or [Bitcoin](https://goo.gl/uJUAaU).
 
 ## How It Works
 
@@ -29,13 +29,18 @@ or it is deleted immediately, if `reactionComment` is set to `false`.
    for the intended repositories
 2. Create `.github/reaction.yml` based on the template below
 
+⚠️ **If possible, install the app only for select repositories.
+Do not leave the `All repositories` option selected, unless you intend
+to use the app for all current and future repositories.**
+
 #### Configuration
 
-Create `.github/reaction.yml` in the default branch to enable the app.
+Create `.github/reaction.yml` in the default branch to enable the app,
+or add it at the same file path to a special repository named `.github`.
 The file can be empty, or it can override any of these default settings:
 
 ```yaml
-# Configuration for reaction-comments - https://github.com/dessant/reaction-comments
+# Configuration for Reaction Comments - https://github.com/dessant/reaction-comments
 
 # Issues and pull requests with these labels accept reaction comments.
 # Set to `[]` to disable
@@ -69,5 +74,7 @@ instance of this app.
 
 ## License
 
-Reaction Comments is released under the terms of the MIT License.
-Please refer to the [LICENSE](LICENSE) file.
+Copyright (c) 2018-2019 Armin Sebastian
+
+This software is released under the terms of the MIT License.
+See the [LICENSE](LICENSE) file for further information.
