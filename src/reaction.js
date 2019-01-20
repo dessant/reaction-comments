@@ -11,18 +11,31 @@ module.exports = class Reaction {
   }
 
   async comment() {
-    const {only: type} = this.config;
     const {isBot, payload, github} = this.context;
     const issue = this.context.issue();
 
-    if (isBot || (type === 'issues' && payload.issue.pull_request)) {
+    if (isBot) {
+      return;
+    }
+
+    const isReviewComment = payload.comment.hasOwnProperty('commit_id');
+
+    const {only} = this.config;
+    const type =
+      isReviewComment || payload.issue.pull_request ? 'pulls' : 'issues';
+    if (only && only !== type) {
       return;
     }
 
     const exemptLabels = this.getConfigValue(type, 'exemptLabels');
-    for (const label of exemptLabels) {
-      if (payload.issue.labels.includes(label)) {
-        return;
+    if (exemptLabels.length) {
+      const labels = (payload.issue || payload.pull_request).labels.map(
+        label => label.name
+      );
+      for (const label of exemptLabels) {
+        if (labels.includes(label)) {
+          return;
+        }
       }
     }
 
@@ -49,7 +62,6 @@ module.exports = class Reaction {
     };
 
     let reactionComment = this.getConfigValue(type, 'reactionComment');
-    const isReviewComment = payload.comment.hasOwnProperty('commit_id');
     const GhResource = isReviewComment ? github.pullRequests : github.issues;
 
     if (!reactionComment) {
@@ -97,7 +109,6 @@ module.exports = class Reaction {
   }
 
   async delete() {
-    const {only: type} = this.config;
     const {payload, github} = this.context;
 
     const commentsRef = this.getStorage(
@@ -202,11 +213,7 @@ module.exports = class Reaction {
   }
 
   getConfigValue(type, key) {
-    if (
-      type &&
-      this.config[type] &&
-      typeof this.config[type][key] !== 'undefined'
-    ) {
+    if (this.config[type] && typeof this.config[type][key] !== 'undefined') {
       return this.config[type][key];
     }
     return this.config[key];
