@@ -15,7 +15,7 @@ The app detects if a new comment consists solely of emojis and shortcodes used i
 
 #### Configuration
 
-Create `.github/reaction.yml` in the default branch to enable the app, or add it at the same file path to a special repository named `.github`. The file can be empty, or it can override any of these default settings:
+Create `.github/reaction.yml` in the default branch to enable the app, or add it at the same file path to a repository named `.github`. The file can be empty, or it can override any of these default settings:
 
 ```yaml
 # Configuration for Reaction Comments - https://github.com/dessant/reaction-comments
