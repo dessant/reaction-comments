@@ -29,7 +29,7 @@ const fields = {
 const schema = Joi.object().keys({
   exemptLabels: fields.exemptLabels.default([]),
   reactionComment: fields.reactionComment.default(
-    ':wave: @{comment-author}, did you mean to use ' +
+    ':wave: @{comment-author}, would you like to leave ' +
       'a [reaction](https://git.io/vhzhC) instead?'
   ),
   only: Joi.string()
