@@ -13,8 +13,10 @@ reactions.
 
 The continued development of Reaction Comments is made possible
 thanks to the support of awesome backers. If you'd like to join them,
-please consider contributing with [Patreon](https://www.patreon.com/dessant),
-[PayPal](https://www.paypal.me/ArminSebastian) or [Bitcoin](https://goo.gl/uJUAaU).
+please consider contributing with
+[Patreon](https://armin.dev/go/patreon?pr=reaction-comments&src=repo),
+[PayPal](https://armin.dev/go/paypal?pr=reaction-comments&src=repo) or
+[Bitcoin](https://armin.dev/go/bitcoin?pr=reaction-comments&src=repo).
 
 ## How It Works
 
@@ -29,7 +31,7 @@ or it is deleted immediately, if `reactionComment` is set to `false`.
    for the intended repositories
 2. Create `.github/reaction.yml` based on the template below
 
-⚠️ **If possible, install the app only for select repositories.
+**If possible, install the app only for select repositories.
 Do not leave the `All repositories` option selected, unless you intend
 to use the app for all current and future repositories.**
 
