@@ -1,6 +1,28 @@
-# Change Log
+# Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [1.0.0](https://github.com/dessant/reaction-comments/compare/v0.3.2...v1.0.0) (2019-06-09)
+
+
+### Bug Fixes
+
+* remove indentation from original comment ([8752a00](https://github.com/dessant/reaction-comments/commit/8752a00))
+* update default comment in schema ([5b2be1d](https://github.com/dessant/reaction-comments/commit/5b2be1d))
+
+
+### Features
+
+* support new reactions ([b7ce8e6](https://github.com/dessant/reaction-comments/commit/b7ce8e6))
+* update dependencies ([1b0d617](https://github.com/dessant/reaction-comments/commit/1b0d617))
+* use GitHub tooltip copy as default comment ([4161662](https://github.com/dessant/reaction-comments/commit/4161662))
+
+
+### BREAKING CHANGES
+
+* probot < 9.2.13 no longer supported.
+
+
 
 <a name="0.3.2"></a>
 ## [0.3.2](https://github.com/dessant/reaction-comments/compare/v0.3.1...v0.3.2) (2019-01-20)
