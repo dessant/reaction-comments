@@ -90,7 +90,7 @@ module.exports = class Reaction {
       </summary>
       </br>
 
-      ${commentBody}
+      ${dedent(commentBody)}
       </details>
       </h6>
     `;
