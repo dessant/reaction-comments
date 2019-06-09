@@ -12,7 +12,9 @@ module.exports = class Reaction {
 
   async comment() {
     const {isBot, payload, github} = this.context;
-    const issue = this.context.issue();
+    const issue = this.context.repo({
+      issue_number: this.context.issue().number
+    });
 
     if (isBot) {
       return;
@@ -62,7 +64,7 @@ module.exports = class Reaction {
     };
 
     let reactionComment = this.getConfigValue(type, 'reactionComment');
-    const GhResource = isReviewComment ? github.pullRequests : github.issues;
+    const GhResource = isReviewComment ? github.pulls : github.issues;
 
     if (!reactionComment) {
       this.log.info({issue, commentId}, 'Deleting comment');
@@ -95,7 +97,7 @@ module.exports = class Reaction {
 
     this.log.info({issue, commentId}, 'Editing comment');
     await this.ensureUnlock(issue, lock, () =>
-      GhResource.editComment({...commentParams, body: editedComment})
+      GhResource.updateComment({...commentParams, body: editedComment})
     );
 
     await this.getStorage(
@@ -104,7 +106,7 @@ module.exports = class Reaction {
       dt: Date.now(),
       isReviewComment,
       commentId,
-      issue: issue.number
+      issue: issue.issue_number
     });
   }
 
@@ -136,7 +138,7 @@ module.exports = class Reaction {
           comment_id: comment.commentId
         };
         const GhResource = comment.isReviewComment
-          ? github.pullRequests
+          ? github.pulls
           : github.issues;
 
         let commentData;
@@ -150,7 +152,7 @@ module.exports = class Reaction {
         }
         const commentBody = commentData.body;
         if (/<!--notice-->/.test(commentBody) || reactionRx.test(commentBody)) {
-          const issue = {owner, repo, number: comment.issue};
+          const issue = {owner, repo, issue_number: comment.issue};
           const {data: issueData} = await github.issues.get({
             ...issue,
             headers: {

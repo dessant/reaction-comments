@@ -15,7 +15,7 @@ module.exports = async robot => {
   const db = firebaseApp.database();
 
   const github = await robot.auth();
-  const appName = (await github.apps.get({})).data.name;
+  const appName = (await github.apps.getAuthenticated()).data.name;
 
   const scheduler = createScheduler(robot);
 
