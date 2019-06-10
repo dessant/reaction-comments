@@ -4,7 +4,7 @@ A GitHub App that deletes +1 comments, and encourages the use of GitHub reaction
 
 ## Supporting the Project
 
-The continued development of Reaction Comments is made possible thanks to the support of awesome backers. If you'd like to join them, please consider contributing with [Patreon](https://armin.dev/go/patreon?pr=reaction-comments&src=repo), [PayPal](https://armin.dev/go/paypal?pr=reaction-comments&src=repo) or [Bitcoin](https://armin.dev/go/bitcoin?pr=reaction-comments&src=repo).
+The continued development of Reaction Comments is made possible thanks to the support of awesome backers. If you'd like to join them, please consider contributing with [Patreon](https://armin.dev/go/patreon?pr=reaction-comments&src=app), [PayPal](https://armin.dev/go/paypal?pr=reaction-comments&src=app) or [Bitcoin](https://armin.dev/go/bitcoin?pr=reaction-comments&src=app).
 
 ## How It Works
 
