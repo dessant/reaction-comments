@@ -78,7 +78,7 @@ module.exports = async robot => {
     let config;
     const repo = context.repo();
     try {
-      let repoConfig = await context.onfig(file);
+      let repoConfig = await context.config(file);
       if (!repoConfig) {
         repoConfig = {perform: false};
       }
