@@ -1,7 +1,6 @@
 const uuidV4 = require('uuid/v4');
 const firebase = require('firebase-admin');
 const createScheduler = require('probot-scheduler');
-const getMergedConfig = require('probot-config');
 const sendMessage = require('probot-messages');
 
 const App = require('./reaction');
@@ -79,7 +78,7 @@ module.exports = async robot => {
     let config;
     const repo = context.repo();
     try {
-      let repoConfig = await getMergedConfig(context, file);
+      let repoConfig = await context.onfig(file);
       if (!repoConfig) {
         repoConfig = {perform: false};
       }
