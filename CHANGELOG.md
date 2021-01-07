@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/dessant/reaction-comments/compare/v1.0.2...v2.0.0) (2021-01-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* The deployment method and configuration options have changed.
+
+*  feat: move to GitHub Actions ([a74bb54](https://github.com/dessant/reaction-comments/commit/a74bb54bca3d02001dd7ba6ac185b25aec10249b))
+
 ### [1.0.2](https://github.com/dessant/reaction-comments/compare/v1.0.1...v1.0.2) (2019-10-25)
 
 
