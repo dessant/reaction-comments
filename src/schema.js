@@ -1,48 +1,82 @@
-const Joi = require('@hapi/joi');
+const Joi = require('joi');
 
-const fields = {
-  exemptLabels: Joi.array()
-    .single()
-    .items(
-      Joi.string()
-        .trim()
-        .max(50)
+const extendedJoi = Joi.extend({
+  type: 'stringList',
+  base: Joi.array(),
+  coerce: {
+    from: 'string',
+    method(value) {
+      value = value.trim();
+      if (value) {
+        value = value
+          .split(',')
+          .map(item => item.trim())
+          .filter(Boolean);
+      }
+
+      return {value};
+    }
+  }
+}).extend({
+  type: 'processOnly',
+  base: Joi.string(),
+  coerce: {
+    from: 'string',
+    method(value) {
+      value = value.trim();
+      if (['issues', 'prs'].includes(value)) {
+        value = value.slice(0, -1);
+      }
+
+      return {value};
+    }
+  }
+});
+
+const schema = Joi.object({
+  'github-token': Joi.string().trim().max(100),
+
+  'exempt-issue-labels': Joi.alternatives()
+    .try(
+      extendedJoi
+        .stringList()
+        .items(Joi.string().trim().max(50))
+        .min(1)
+        .max(30)
+        .unique(),
+      Joi.string().trim().valid('')
     )
-    .description(
-      'Issues and pull requests with these labels accept reaction comments. ' +
-        'Set to `[]` to disable'
+    .default(''),
+
+  'issue-comment': Joi.string()
+    .trim()
+    .max(10000)
+    .allow('')
+    .default(
+      ':wave: @{comment-author}, would you like to leave a [reaction](https://git.io/JUJYX) instead?'
     ),
 
-  reactionComment: Joi.alternatives()
+  'exempt-pr-labels': Joi.alternatives()
     .try(
-      Joi.string()
-        .trim()
-        .max(10000),
-      Joi.boolean().only(false)
+      extendedJoi
+        .stringList()
+        .items(Joi.string().trim().max(50))
+        .min(1)
+        .max(30)
+        .unique(),
+      Joi.string().trim().valid('')
     )
-    .description(
-      'Replace matching comments with this message, `{comment-author}` ' +
-        'is an optional placeholder. Set to `false` to disable'
-    )
-};
+    .default(''),
 
-const schema = Joi.object().keys({
-  exemptLabels: fields.exemptLabels.default([]),
-  reactionComment: fields.reactionComment.default(
-    ':wave: @{comment-author}, would you like to leave ' +
-      'a [reaction](https://git.io/vhzhC) instead?'
-  ),
-  only: Joi.string()
+  'pr-comment': Joi.string()
     .trim()
-    .valid('issues', 'pulls')
-    .description('Limit to only `issues` or `pulls`'),
-  pulls: Joi.object().keys(fields),
-  issues: Joi.object().keys(fields),
-  _extends: Joi.string()
-    .trim()
-    .max(260)
-    .description('Repository to extend settings from'),
-  perform: Joi.boolean().default(!process.env.DRY_RUN)
+    .max(10000)
+    .allow('')
+    .default(
+      ':wave: @{comment-author}, would you like to leave a [reaction](https://git.io/JUJYX) instead?'
+    ),
+
+  'process-only': extendedJoi.processOnly().valid('issue', 'pr', '').default('')
 });
 
 module.exports = schema;

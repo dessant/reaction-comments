@@ -1,44 +1,41 @@
 {
   "name": "reaction-comments",
   "version": "1.0.2",
-  "description": "A GitHub App built with Probot that deletes +1 comments.",
+  "description": "A GitHub Action that deletes +1 comments and encourages the use of GitHub reactions.",
   "author": "Armin Sebastian",
   "license": "MIT",
+  "homepage": "https://github.com/dessant/reaction-comments",
   "repository": {
     "url": "https://github.com/dessant/reaction-comments.git",
     "type": "git"
   },
-  "bugs": "https://github.com/dessant/reaction-comments/issues",
+  "bugs": {
+    "url": "https://github.com/dessant/reaction-comments/issues"
+  },
   "main": "src/index.js",
   "scripts": {
-    "start": "probot run ./src/index.js",
-    "watch": "nodemon --exec 'yarn run start'",
-    "update": "ncu --upgrade && yarn",
-    "push": "git push --follow-tags origin master",
-    "release": "standard-version"
+    "build": "ncc build src/index.js -o dist",
+    "update": "ncu --upgrade",
+    "release": "standard-version",
+    "push": "git push --tags origin master"
   },
-  "files": [
-    "docs",
-    "src"
-  ],
   "dependencies": {
+    "@actions/artifact": "^0.5.0",
+    "@actions/core": "^1.2.6",
+    "@actions/github": "^4.0.0",
+    "adm-zip": "^0.5.1",
     "dedent": "^0.7.0",
-    "firebase-admin": "^8.6.1",
-    "@hapi/joi": "^16.1.7",
-    "probot": "^9.6.0",
-    "probot-messages": "^1.0.1",
-    "probot-scheduler": "dessant/scheduler#cbb84f6",
-    "uuid": "^3.3.3"
+    "fs-extra": "^9.0.1",
+    "joi": "^17.3.0"
   },
   "devDependencies": {
-    "nodemon": "1.19.4",
-    "npm-check-updates": "^3.1.25",
-    "prettier": "^1.18.2",
-    "smee-client": "^1.1.0",
-    "standard-version": "^7.0.0"
+    "@vercel/ncc": "^0.26.1",
+    "npm-check-updates": "^10.2.5",
+    "prettier": "^2.2.1",
+    "standard-version": "^9.1.0"
   },
   "engines": {
-    "node": ">=8.12.0"
+    "node": ">=12.0.0"
   },
   "keywords": [
     "github",
@@ -49,12 +46,9 @@
     "reactions",
     "github reactions",
     "automation",
-    "github app",
-    "probot",
-    "probot app",
+    "github actions",
+    "project management",
     "bot"
   ],
-  "resolutions": {
-    "**/@octokit/endpoint": "^5.3.6"
-  }
+  "private": true
 }

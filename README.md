@@ -1,11 +1,10 @@
 # Reaction Comments
 
-[![Build Status](https://img.shields.io/travis/com/dessant/reaction-comments/master.svg)](https://travis-ci.com/dessant/reaction-comments)
-[![Version](https://img.shields.io/npm/v/reaction-comments.svg?colorB=007EC6)](https://www.npmjs.com/package/reaction-comments)
+Reaction Comments is a GitHub Action that deletes reaction comments,
+such as +1, and encourages the use of GitHub reactions.
 
-Reaction Comments is a GitHub App built with [Probot](https://github.com/probot/probot)
-that deletes reaction comments, such as +1, and encourages the use of GitHub
-reactions.
+> The legacy version of this project can be found
+[here](https://github.com/dessant/reaction-comments-app).
 
 ![](assets/screenshot.png)
 
@@ -20,63 +19,161 @@ please consider contributing with
 
 ## How It Works
 
-The app detects if a new comment consists solely of emojis and shortcodes
-used in GitHub reactions. A matching comment is either replaced
-with the message set in `reactionComment` and deleted after a day,
-or it is deleted immediately, if `reactionComment` is set to `false`.
+The action detects if new or edited comments consist solely of emojis
+and shortcodes used in GitHub reactions. Matching comments are replaced with
+the message set in `issue-comment` or `pr-comment`, and deleted after a day.
+When the `issue-comment` or `pr-comment` parameter is set to `''`,
+matching comments are immediately deleted.
 
 ## Usage
 
-1. **[Install the GitHub App](https://github.com/apps/reaction)**
-   for the intended repositories
-2. Create `.github/reaction.yml` based on the template below
+Create a `reaction-comments.yml` workflow file in the `.github/workflows`
+directory, use one of the [example workflows](#examples) to get started.
 
-**If possible, install the app only for select repositories.
-Do not leave the `All repositories` option selected, unless you intend
-to use the app for all current and future repositories.**
+### Inputs
 
-#### Configuration
+The action can be configured using [input parameters](https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idstepswith).
+All parameters are optional, except `github-token`.
 
-Create `.github/reaction.yml` in the default branch to enable the app,
-or add it at the same file path to a repository named `.github`.
-The file can be empty, or it can override any of these default settings:
+- **`github-token`**
+  - GitHub access token, value must be `${{ github.token }}`
+  - Required
+- **`exempt-issue-labels`**
+  - Do not process comments on issues with these labels, value must be
+    a comma separated list of labels
+  - Optional, defaults to `''`
+- **`issue-comment`**
+  - Replace reaction comments on issues with this message,
+    `{comment-author}` is an optional placeholder
+  - Optional, defaults to `:wave: @{comment-author}, would you like to leave
+    a [reaction](https://git.io/vhzhC) instead?`
+- **`exempt-pr-labels`**
+  - Do not process comments on pull requests with these labels, value must be
+    a comma separated list of labels
+  - Optional, defaults to `''`
+- **`pr-comment`**
+  - Replace reaction comments on pull requests with this message,
+    `{comment-author}` is an optional placeholder
+  - Optional, defaults to `:wave: @{comment-author}, would you like to leave
+    a [reaction](https://git.io/vhzhC) instead?`
+- **`process-only`**
+  - Process comments only on issues or pull requests, value must be
+    either `issues` or `prs`
+  - Optional, defaults to `''`
+
+### Outputs
+
+- **`comments`**
+  - Comments that have been either deleted or scheduled for removal,
+    value is a JSON string in the form of
+    `[{"owner": "actions", "repo": "toolkit", "issue_number": 1,
+    "comment_id": 754701878, "is_review_comment": false, "status": "deleted"}]`,
+    value of `status` is either `scheduled` or `deleted`
+
+## Examples
+
+The following workflow will replace new or edited reaction comments
+with a helpful message, and delete them after a day.
 
 ```yaml
-# Configuration for Reaction Comments - https://github.com/dessant/reaction-comments
+name: 'Delete reaction comments'
 
-# Issues and pull requests with these labels accept reaction comments.
-# Set to `[]` to disable
-exemptLabels: []
+on:
+  issue_comment:
+    types: [created, edited]
+  pull_request_review_comment:
+    types: [created, edited]
+  schedule:
+    - cron: '0 0 * * *'
 
-# Replace matching comments with this message, `{comment-author}` is an
-# optional placeholder. Set to `false` to disable
-reactionComment: >
-  :wave: @{comment-author}, would you like to leave
-  a [reaction](https://git.io/vhzhC) instead?
-
-# Limit to only `issues` or `pulls`
-# only: issues
-
-# Optionally, specify configuration settings just for `issues` or `pulls`
-# issues:
-#   exemptLabels:
-#     - party-parrot
-
-# pulls:
-#   reactionComment: false
-
-# Repository to extend settings from
-# _extends: repo
+jobs:
+  lockdown:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: dessant/reaction-comments@v2
+        with:
+          github-token: ${{ github.token }}
 ```
 
-## Deployment
+### Available input parameters
 
-See [docs/deploy.md](docs/deploy.md) if you would like to run your own
-instance of this app.
+This workflow declares all the available input parameters of the action
+and their default values. Any of the parameters can be omitted,
+except `github-token`.
+
+```yaml
+name: 'Delete reaction comments'
+
+on:
+  issue_comment:
+    types: [created, edited]
+  pull_request_review_comment:
+    types: [created, edited]
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  reaction:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: dessant/reaction-comments@v2
+        with:
+          github-token: ${{ github.token }}
+          exempt-issue-labels: ''
+          issue-comment: >
+            :wave: @{comment-author}, would you like to leave
+            a [reaction](https://git.io/JUJYX) instead?
+          exempt-pr-labels: ''
+          pr-comment: >
+            :wave: @{comment-author}, would you like to leave
+            a [reaction](https://git.io/JUJYX) instead?
+          process-only: ''
+```
+
+### Ignoring comments
+
+This step will process comments only on issues, and ignore threads
+with the the `help` or `party-parrot` labels applied.
+
+```yaml
+    steps:
+      - uses: dessant/reaction-comments@v2
+        with:
+          github-token: ${{ github.token }}
+          exempt-issue-labels: 'help, party-parrot'
+          process-only: 'issues'
+```
+
+This step will process comments only on pull requests, and ignore threads
+with the `pinned` label applied.
+
+```yaml
+    steps:
+      - uses: dessant/reaction-comments@v2
+        with:
+          github-token: ${{ github.token }}
+          exempt-pr-labels: 'pinned'
+          process-only: 'prs'
+```
+
+### Deleting comments
+
+By default, reaction comments are replaced with a message and deleted
+after a day. This step will immediately delete new or edited reaction comments
+on issues and pull requests.
+
+```yaml
+    steps:
+      - uses: dessant/reaction-comments@v2
+        with:
+          github-token: ${{ github.token }}
+          issue-comment: ''
+          pr-comment: ''
+```
 
 ## License
 
-Copyright (c) 2018-2019 Armin Sebastian
+Copyright (c) 2018-2021 Armin Sebastian
 
 This software is released under the terms of the MIT License.
 See the [LICENSE](LICENSE) file for further information.
