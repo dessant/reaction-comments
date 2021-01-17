@@ -6,7 +6,7 @@ such as +1, and encourages the use of GitHub reactions.
 > The legacy version of this project can be found
 [here](https://github.com/dessant/reaction-comments-app).
 
-<img src="https://raw.githubusercontent.com/dessant/reaction-comments/master/assets/screenshot.png" style="max-width: 800px">
+<img width="800" src="https://raw.githubusercontent.com/dessant/reaction-comments/master/assets/screenshot.png">
 
 ## Supporting the Project
 
