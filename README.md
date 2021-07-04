@@ -35,6 +35,7 @@ directory, use one of the [example workflows](#examples) to get started.
 The action can be configured using [input parameters](https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idstepswith).
 All parameters are optional, except `github-token`.
 
+<!-- prettier-ignore -->
 - **`github-token`**
   - GitHub access token, value must be `${{ github.token }}`
   - Required
@@ -63,6 +64,7 @@ All parameters are optional, except `github-token`.
 
 ### Outputs
 
+<!-- prettier-ignore -->
 - **`comments`**
   - Comments that have been either deleted or scheduled for removal,
     value is a JSON string in the form of
@@ -75,6 +77,7 @@ All parameters are optional, except `github-token`.
 The following workflow will replace new or edited reaction comments
 with a helpful message, and delete them after a day.
 
+<!-- prettier-ignore -->
 ```yaml
 name: 'Delete reaction comments'
 
@@ -86,8 +89,12 @@ on:
   schedule:
     - cron: '0 0 * * *'
 
+permissions:
+  issues: write
+  pull-requests: write
+
 jobs:
-  lockdown:
+  action:
     runs-on: ubuntu-latest
     steps:
       - uses: dessant/reaction-comments@v2
@@ -101,6 +108,7 @@ This workflow declares all the available input parameters of the action
 and their default values. Any of the parameters can be omitted,
 except `github-token`.
 
+<!-- prettier-ignore -->
 ```yaml
 name: 'Delete reaction comments'
 
@@ -112,8 +120,12 @@ on:
   schedule:
     - cron: '0 0 * * *'
 
+permissions:
+  issues: write
+  pull-requests: write
+
 jobs:
-  reaction:
+  action:
     runs-on: ubuntu-latest
     steps:
       - uses: dessant/reaction-comments@v2
@@ -135,6 +147,7 @@ jobs:
 This step will process comments only on issues, and ignore threads
 with the the `help` or `party-parrot` labels applied.
 
+<!-- prettier-ignore -->
 ```yaml
     steps:
       - uses: dessant/reaction-comments@v2
@@ -147,6 +160,7 @@ with the the `help` or `party-parrot` labels applied.
 This step will process comments only on pull requests, and ignore threads
 with the `pinned` label applied.
 
+<!-- prettier-ignore -->
 ```yaml
     steps:
       - uses: dessant/reaction-comments@v2
@@ -162,6 +176,7 @@ By default, reaction comments are replaced with a message and deleted
 after a day. This step will immediately delete new or edited reaction comments
 on issues and pull requests.
 
+<!-- prettier-ignore -->
 ```yaml
     steps:
       - uses: dessant/reaction-comments@v2
