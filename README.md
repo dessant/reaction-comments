@@ -3,9 +3,6 @@
 Reaction Comments is a GitHub Action that deletes reaction comments,
 such as +1, and encourages the use of GitHub reactions.
 
-> The legacy version of this project can be found
-[here](https://github.com/dessant/reaction-comments-app).
-
 <img width="800" src="https://raw.githubusercontent.com/dessant/reaction-comments/master/assets/screenshot.png">
 
 ## Supporting the Project
@@ -32,13 +29,13 @@ directory, use one of the [example workflows](#examples) to get started.
 
 ### Inputs
 
-The action can be configured using [input parameters](https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idstepswith).
-All parameters are optional, except `github-token`.
+The action can be configured using [input parameters](https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idstepswith).
 
 <!-- prettier-ignore -->
 - **`github-token`**
-  - GitHub access token, value must be `${{ github.token }}`
-  - Required
+  - GitHub access token, value must be `${{ github.token }}` or an encrypted
+    secret that contains a [personal access token](#using-a-personal-access-token)
+  - Optional, defaults to `${{ github.token }}`
 - **`exempt-issue-labels`**
   - Do not process comments on issues with these labels, value must be
     a comma separated list of labels
@@ -79,7 +76,7 @@ with a helpful message, and delete them after a day.
 
 <!-- prettier-ignore -->
 ```yaml
-name: 'Delete reaction comments'
+name: 'Reaction Comments'
 
 on:
   issue_comment:
@@ -98,19 +95,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: dessant/reaction-comments@v2
-        with:
-          github-token: ${{ github.token }}
 ```
 
 ### Available input parameters
 
 This workflow declares all the available input parameters of the action
-and their default values. Any of the parameters can be omitted,
-except `github-token`.
+and their default values. Any of the parameters can be omitted.
 
 <!-- prettier-ignore -->
 ```yaml
-name: 'Delete reaction comments'
+name: 'Reaction Comments'
 
 on:
   issue_comment:
@@ -152,7 +146,6 @@ with the the `help` or `party-parrot` labels applied.
     steps:
       - uses: dessant/reaction-comments@v2
         with:
-          github-token: ${{ github.token }}
           exempt-issue-labels: 'help, party-parrot'
           process-only: 'issues'
 ```
@@ -165,7 +158,6 @@ with the `pinned` label applied.
     steps:
       - uses: dessant/reaction-comments@v2
         with:
-          github-token: ${{ github.token }}
           exempt-pr-labels: 'pinned'
           process-only: 'prs'
 ```
@@ -181,9 +173,28 @@ on issues and pull requests.
     steps:
       - uses: dessant/reaction-comments@v2
         with:
-          github-token: ${{ github.token }}
           issue-comment: ''
           pr-comment: ''
+```
+
+### Using a personal access token
+
+The action uses an installation access token by default to interact with GitHub.
+You may also authenticate with a personal access token to perform actions
+as a GitHub user instead of the `github-actions` app.
+
+Create a [personal access token](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token)
+with the `repo` or `public_repo` scopes enabled, and add the token as an
+[encrypted secret](https://docs.github.com/en/actions/reference/encrypted-secrets#creating-encrypted-secrets-for-a-repository)
+for the repository or organization, then provide the action with the secret
+using the `github-token` input parameter.
+
+<!-- prettier-ignore -->
+```yaml
+    steps:
+      - uses: dessant/reaction-comments@v2
+        with:
+          github-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 ```
 
 ## License
