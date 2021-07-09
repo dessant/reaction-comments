@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://github.com/dessant/reaction-comments/compare/v2.0.0...v2.1.0) (2021-07-09)
+
+
+### Features
+
+* make github-token optional and document the use of personal access tokens ([adb3aa7](https://github.com/dessant/reaction-comments/commit/adb3aa7d45ba2a0bfab68933e3ca98cc383c61db))
+
+
+### Bug Fixes
+
+* declare required permissions ([8524539](https://github.com/dessant/reaction-comments/commit/8524539bc2cebd41594dd2a3042fbc86e91b6abd))
+
 ## [2.0.0](https://github.com/dessant/reaction-comments/compare/v1.0.2...v2.0.0) (2021-01-07)
 
 
