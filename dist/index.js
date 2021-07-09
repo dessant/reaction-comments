@@ -36510,8 +36510,8 @@ class App {
       try {
         await this.ensureUnlock(issue, lock, () =>
           (isReviewComment
-            ? this.client.pulls.updateReviewComment
-            : this.client.issues.updateComment)({
+            ? this.client.rest.pulls.updateReviewComment
+            : this.client.rest.issues.updateComment)({
             ...comment,
             body: editedComment
           })
@@ -36536,8 +36536,8 @@ class App {
       try {
         await this.ensureUnlock(issue, lock, () =>
           (isReviewComment
-            ? this.client.pulls.deleteReviewComment
-            : this.client.issues.deleteComment)(comment)
+            ? this.client.rest.pulls.deleteReviewComment
+            : this.client.rest.issues.deleteComment)(comment)
         );
       } catch (err) {
         if (err.status === 404) {
@@ -36563,7 +36563,7 @@ class App {
 
     const {
       data: {workflow_id: workflowId}
-    } = await this.client.actions.getWorkflowRun({
+    } = await this.client.rest.actions.getWorkflowRun({
       owner,
       repo,
       run_id: github.context.runId
@@ -36573,7 +36573,7 @@ class App {
       data: {
         workflow_runs: [lastScheduledRun]
       }
-    } = await this.client.actions.listWorkflowRuns({
+    } = await this.client.rest.actions.listWorkflowRuns({
       owner,
       repo,
       event: 'schedule',
@@ -36593,7 +36593,7 @@ class App {
     }
 
     const workflowRuns = await this.client.paginate(
-      this.client.actions.listWorkflowRuns,
+      this.client.rest.actions.listWorkflowRuns,
       {
         owner,
         repo,
@@ -36647,11 +36647,11 @@ class App {
           ({
             data: {body: commentBody}
           } = await (isReviewComment
-            ? this.client.pulls.getReviewComment
-            : this.client.issues.getComment)(comment));
+            ? this.client.rest.pulls.getReviewComment
+            : this.client.rest.issues.getComment)(comment));
         } catch (err) {
           if (err.status === 404) {
-            await this.client.actions.deleteArtifact({
+            await this.client.rest.actions.deleteArtifact({
               owner,
               repo,
               artifact_id: artifactId
@@ -36666,7 +36666,7 @@ class App {
         }
 
         if (/<!--notice-->/.test(commentBody) || reactionRx.test(commentBody)) {
-          const {data: issueData} = await this.client.issues.get({
+          const {data: issueData} = await this.client.rest.issues.get({
             ...issue,
             headers: {
               Accept: 'application/vnd.github.sailor-v-preview+json'
@@ -36681,11 +36681,11 @@ class App {
           core.debug(`Deleting comment (comment: ${commentId})`);
           await this.ensureUnlock(issue, lock, () =>
             (isReviewComment
-              ? this.client.pulls.deleteReviewComment
-              : this.client.issues.deleteComment)(comment)
+              ? this.client.rest.pulls.deleteReviewComment
+              : this.client.rest.issues.deleteComment)(comment)
           );
 
-          await this.client.actions.deleteArtifact({
+          await this.client.rest.actions.deleteArtifact({
             owner,
             repo,
             artifact_id: artifactId
@@ -36710,7 +36710,7 @@ class App {
     }
 
     if (lastScheduledRunArtifactId) {
-      await this.client.actions.deleteArtifact({
+      await this.client.rest.actions.deleteArtifact({
         owner,
         repo,
         artifact_id: lastScheduledRunArtifactId
@@ -36727,7 +36727,7 @@ class App {
 
     const {
       data: {artifacts}
-    } = await this.client.actions.listWorkflowRunArtifacts({
+    } = await this.client.rest.actions.listWorkflowRunArtifacts({
       owner,
       repo,
       run_id: runId
@@ -36738,7 +36738,7 @@ class App {
     );
 
     if (artifact) {
-      const {data: archive} = await this.client.actions.downloadArtifact({
+      const {data: archive} = await this.client.rest.actions.downloadArtifact({
         owner,
         repo,
         artifact_id: artifact.id,
@@ -36786,7 +36786,7 @@ class App {
   async ensureUnlock(issue, lock, action) {
     if (lock.active) {
       if (!lock.hasOwnProperty('reason')) {
-        const {data: issueData} = await this.client.issues.get({
+        const {data: issueData} = await this.client.rest.issues.get({
           ...issue,
           headers: {
             Accept: 'application/vnd.github.sailor-v-preview+json'
@@ -36794,7 +36794,7 @@ class App {
         });
         lock.reason = issueData.active_lock_reason;
       }
-      await this.client.issues.unlock(issue);
+      await this.client.rest.issues.unlock(issue);
 
       let actionError;
       try {
@@ -36812,7 +36812,7 @@ class App {
           }
         };
       }
-      await this.client.issues.lock(issue);
+      await this.client.rest.issues.lock(issue);
 
       if (actionError) {
         throw actionError;
