@@ -1,6 +1,6 @@
 {
   "name": "reaction-comments",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "A GitHub Action that deletes +1 comments and encourages the use of GitHub reactions.",
   "author": "Armin Sebastian",
   "license": "MIT",
