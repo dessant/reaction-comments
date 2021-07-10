@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.1.2](https://github.com/dessant/reaction-comments/compare/v2.1.1...v2.1.2) (2021-07-10)
+
+
+### Bug Fixes
+
+* add required permission ([c83ec47](https://github.com/dessant/reaction-comments/commit/c83ec4712f6cbc2cc93b756700840d7f43880fc6))
+
 ### [2.1.1](https://github.com/dessant/reaction-comments/compare/v2.1.0...v2.1.1) (2021-07-09)
 
 
