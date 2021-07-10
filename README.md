@@ -87,6 +87,7 @@ on:
     - cron: '0 0 * * *'
 
 permissions:
+  actions: write
   issues: write
   pull-requests: write
 
@@ -115,6 +116,7 @@ on:
     - cron: '0 0 * * *'
 
 permissions:
+  actions: write
   issues: write
   pull-requests: write
 
