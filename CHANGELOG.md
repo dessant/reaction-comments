@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.2.0](https://github.com/dessant/reaction-comments/compare/v2.1.2...v2.2.0) (2021-10-02)
+
+
+### Features
+
+* add option for logging output parameters ([0e746c9](https://github.com/dessant/reaction-comments/commit/0e746c972ed6fa0d3a0ae63a774b60b3ebec6c1f))
+
+
+### Bug Fixes
+
+* remove broken link in default message ([a28549d](https://github.com/dessant/reaction-comments/commit/a28549d35841d6b4f48e3272fc03eb3fa40258a4))
+
 ### [2.1.2](https://github.com/dessant/reaction-comments/compare/v2.1.1...v2.1.2) (2021-07-10)
 
 
