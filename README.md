@@ -44,7 +44,7 @@ The action can be configured using [input parameters](https://docs.github.com/en
   - Replace reaction comments on issues with this message,
     `{comment-author}` is an optional placeholder
   - Optional, defaults to `:wave: @{comment-author}, would you like to leave
-    a [reaction](https://git.io/vhzhC) instead?`
+    a reaction instead?`
 - **`exempt-pr-labels`**
   - Do not process comments on pull requests with these labels, value must be
     a comma separated list of labels
@@ -53,7 +53,7 @@ The action can be configured using [input parameters](https://docs.github.com/en
   - Replace reaction comments on pull requests with this message,
     `{comment-author}` is an optional placeholder
   - Optional, defaults to `:wave: @{comment-author}, would you like to leave
-    a [reaction](https://git.io/vhzhC) instead?`
+    a reaction instead?`
 - **`process-only`**
   - Process comments only on issues or pull requests, value must be
     either `issues` or `prs`
@@ -130,11 +130,11 @@ jobs:
           exempt-issue-labels: ''
           issue-comment: >
             :wave: @{comment-author}, would you like to leave
-            a [reaction](https://git.io/JUJYX) instead?
+            a reaction instead?
           exempt-pr-labels: ''
           pr-comment: >
             :wave: @{comment-author}, would you like to leave
-            a [reaction](https://git.io/JUJYX) instead?
+            a reaction instead?
           process-only: ''
 ```
 

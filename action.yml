@@ -12,7 +12,7 @@ inputs:
     description: 'Replace matching comments on issues with this message, `{comment-author}` is an optional placeholder'
     default: >
       :wave: @{comment-author}, would you like to leave
-      a [reaction](https://git.io/JUJYX) instead?
+      a reaction instead?
   exempt-pr-labels:
     description: 'Do not process comments on pull requests with these labels, value must be a comma separated list of labels'
     default: ''
@@ -20,7 +20,7 @@ inputs:
     description: 'Replace matching comments on pull requests with this message, `{comment-author}` is an optional placeholder'
     default: >
       :wave: @{comment-author}, would you like to leave
-      a [reaction](https://git.io/JUJYX) instead?
+      a reaction instead?
   process-only:
     description: 'Process comments only on issues or pull requests, value must be either `issues` or `prs`'
     default: ''

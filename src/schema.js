@@ -53,7 +53,7 @@ const schema = Joi.object({
     .max(10000)
     .allow('')
     .default(
-      ':wave: @{comment-author}, would you like to leave a [reaction](https://git.io/JUJYX) instead?'
+      ':wave: @{comment-author}, would you like to leave a reaction instead?'
     ),
 
   'exempt-pr-labels': Joi.alternatives()
@@ -73,7 +73,7 @@ const schema = Joi.object({
     .max(10000)
     .allow('')
     .default(
-      ':wave: @{comment-author}, would you like to leave a [reaction](https://git.io/JUJYX) instead?'
+      ':wave: @{comment-author}, would you like to leave a reaction instead?'
     ),
 
   'process-only': extendedJoi.processOnly().valid('issue', 'pr', '').default('')
