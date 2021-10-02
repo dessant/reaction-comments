@@ -24,7 +24,7 @@ matching comments are immediately deleted.
 
 ## Usage
 
-Create a `reaction-comments.yml` workflow file in the `.github/workflows`
+Create the `reaction-comments.yml` workflow file in the `.github/workflows`
 directory, use one of the [example workflows](#examples) to get started.
 
 ### Inputs
@@ -37,8 +37,8 @@ The action can be configured using [input parameters](https://docs.github.com/en
     secret that contains a [personal access token](#using-a-personal-access-token)
   - Optional, defaults to `${{ github.token }}`
 - **`exempt-issue-labels`**
-  - Do not process comments on issues with these labels, value must be
-    a comma separated list of labels
+  - Do not process comments on issues with any of these labels,
+    value must be a comma separated list of labels
   - Optional, defaults to `''`
 - **`issue-comment`**
   - Replace reaction comments on issues with this message,
@@ -46,8 +46,8 @@ The action can be configured using [input parameters](https://docs.github.com/en
   - Optional, defaults to `:wave: @{comment-author}, would you like to leave
     a reaction instead?`
 - **`exempt-pr-labels`**
-  - Do not process comments on pull requests with these labels, value must be
-    a comma separated list of labels
+  - Do not process comments on pull requests with any of these labels,
+    value must be a comma separated list of labels
   - Optional, defaults to `''`
 - **`pr-comment`**
   - Replace reaction comments on pull requests with this message,
@@ -58,6 +58,9 @@ The action can be configured using [input parameters](https://docs.github.com/en
   - Process comments only on issues or pull requests, value must be
     either `issues` or `prs`
   - Optional, defaults to `''`
+- **`log-output`**
+  - Log output parameters, value must be either `true` or `false`
+  - Optional, defaults to `false`
 
 ### Outputs
 
@@ -136,6 +139,7 @@ jobs:
             :wave: @{comment-author}, would you like to leave
             a reaction instead?
           process-only: ''
+          log-output: false
 ```
 
 ### Ignoring comments

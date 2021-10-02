@@ -7,7 +7,8 @@ const zip = require('adm-zip');
 
 const schema = require('./schema');
 
-const reactionRx = /^(?:\s*(?:\+1|-1|:(?:\+1|-1|thumbsup|thumbsdown|smile|tada|confused|heart|rocket|eyes):|\u{1f44d}(?:\u{1f3fb}|\u{1f3fc}|\u{1f3fd}|\u{1f3fe}|\u{1f3ff})?|\u{1f44e}(?:\u{1f3fb}|\u{1f3fc}|\u{1f3fd}|\u{1f3fe}|\u{1f3ff})?|\u{1f604}|\u{1f389}|\u{1f615}|\u{2764}\u{fe0f}|\u{1f680}|\u{1f440})\s*)+$/u;
+const reactionRx =
+  /^(?:\s*(?:\+1|-1|:(?:\+1|-1|thumbsup|thumbsdown|smile|tada|confused|heart|rocket|eyes):|\u{1f44d}(?:\u{1f3fb}|\u{1f3fc}|\u{1f3fd}|\u{1f3fe}|\u{1f3ff})?|\u{1f44e}(?:\u{1f3fb}|\u{1f3fc}|\u{1f3fd}|\u{1f3fe}|\u{1f3ff})?|\u{1f604}|\u{1f389}|\u{1f615}|\u{2764}\u{fe0f}|\u{1f680}|\u{1f440})\s*)+$/u;
 
 async function run() {
   try {
@@ -23,9 +24,16 @@ async function run() {
       output = await app.processNewComment();
     }
 
-    if (output) {
-      core.debug('Setting output (comments)');
+    core.debug('Setting output (comments)');
+    if (output && output.length) {
       core.setOutput('comments', JSON.stringify(output));
+
+      if (config['log-output']) {
+        core.info('Output (comments):');
+        core.info(JSON.stringify(output, null, 2));
+      }
+    } else {
+      core.setOutput('comments', '');
     }
   } catch (err) {
     core.setFailed(err);

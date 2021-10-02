@@ -24,6 +24,9 @@ inputs:
   process-only:
     description: 'Process comments only on issues or pull requests, value must be either `issues` or `prs`'
     default: ''
+  log-output:
+    description: 'Log output parameters, value must be either `true` or `false`'
+    default: false
 outputs:
   comments:
     description: 'Comments that have been either deleted or scheduled for removal, value is a JSON string'
