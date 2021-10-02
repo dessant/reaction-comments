@@ -71,6 +71,7 @@ The action can be configured using [input parameters](https://docs.github.com/en
     `[{"owner": "actions", "repo": "toolkit", "issue_number": 1,
     "comment_id": 754701878, "is_review_comment": false, "status": "deleted"}]`,
     value of `status` is either `scheduled` or `deleted`
+  - Defaults to `''`
 
 ## Examples
 
