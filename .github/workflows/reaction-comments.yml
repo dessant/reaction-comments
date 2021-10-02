@@ -1,4 +1,4 @@
-name: 'Delete reaction comments'
+name: 'Reaction Comments'
 
 on:
   issue_comment:
@@ -8,10 +8,13 @@ on:
   schedule:
     - cron: '0 0 * * *'
 
+permissions:
+  actions: write
+  issues: write
+  pull-requests: write
+
 jobs:
-  lockdown:
+  action:
     runs-on: ubuntu-latest
     steps:
       - uses: dessant/reaction-comments@v2
-        with:
-          github-token: ${{ github.token }}
