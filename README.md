@@ -99,7 +99,7 @@ jobs:
   action:
     runs-on: ubuntu-latest
     steps:
-      - uses: dessant/reaction-comments@v2
+      - uses: dessant/reaction-comments@v3
 ```
 
 ### Available input parameters
@@ -128,7 +128,7 @@ jobs:
   action:
     runs-on: ubuntu-latest
     steps:
-      - uses: dessant/reaction-comments@v2
+      - uses: dessant/reaction-comments@v3
         with:
           github-token: ${{ github.token }}
           exempt-issue-labels: ''
@@ -151,7 +151,7 @@ with the the `help` or `party-parrot` labels applied.
 <!-- prettier-ignore -->
 ```yaml
     steps:
-      - uses: dessant/reaction-comments@v2
+      - uses: dessant/reaction-comments@v3
         with:
           exempt-issue-labels: 'help, party-parrot'
           process-only: 'issues'
@@ -163,7 +163,7 @@ with the `pinned` label applied.
 <!-- prettier-ignore -->
 ```yaml
     steps:
-      - uses: dessant/reaction-comments@v2
+      - uses: dessant/reaction-comments@v3
         with:
           exempt-pr-labels: 'pinned'
           process-only: 'prs'
@@ -178,7 +178,7 @@ on issues and pull requests.
 <!-- prettier-ignore -->
 ```yaml
     steps:
-      - uses: dessant/reaction-comments@v2
+      - uses: dessant/reaction-comments@v3
         with:
           issue-comment: ''
           pr-comment: ''
@@ -199,7 +199,7 @@ using the `github-token` input parameter.
 <!-- prettier-ignore -->
 ```yaml
     steps:
-      - uses: dessant/reaction-comments@v2
+      - uses: dessant/reaction-comments@v3
         with:
           github-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 ```
