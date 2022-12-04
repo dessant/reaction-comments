@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0](https://github.com/dessant/reaction-comments/compare/v2.2.0...v3.0.0) (2022-12-04)
+
+
+### ⚠ BREAKING CHANGES
+
+* the action now requires Node.js 16
+
+### Bug Fixes
+
+* update dependencies ([69813be](https://github.com/dessant/reaction-comments/commit/69813be6e69ef88fafb73376b325afc9ababc8fd))
+* update docs ([9c2ad50](https://github.com/dessant/reaction-comments/commit/9c2ad5077134edd5c3d3e25e787974d33f114050))
+
 ## [2.2.0](https://github.com/dessant/reaction-comments/compare/v2.1.2...v2.2.0) (2021-10-02)
 
 
