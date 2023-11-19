@@ -1,14 +1,12 @@
-const core = require('@actions/core');
-const github = require('@actions/github');
-const artifact = require('@actions/artifact');
-const {writeJson, remove} = require('fs-extra');
-const dedent = require('dedent');
-const zip = require('adm-zip');
+import core from '@actions/core';
+import github from '@actions/github';
+import artifact from '@actions/artifact';
+import {writeJson, remove} from 'fs-extra/esm';
+import dedent from 'dedent';
+import zip from 'adm-zip';
 
-const schema = require('./schema');
-
-const reactionRx =
-  /^(?:\s*(?:\+1|-1|:(?:\+1|-1|thumbsup|thumbsdown|smile|tada|confused|heart|rocket|eyes):|\u{1f44d}(?:\u{1f3fb}|\u{1f3fc}|\u{1f3fd}|\u{1f3fe}|\u{1f3ff})?|\u{1f44e}(?:\u{1f3fb}|\u{1f3fc}|\u{1f3fd}|\u{1f3fe}|\u{1f3ff})?|\u{1f604}|\u{1f389}|\u{1f615}|\u{2764}\u{fe0f}|\u{1f680}|\u{1f440})\s*)+$/u;
+import {getConfig} from './utils.js';
+import {reactionRx} from './data.js';
 
 async function run() {
   try {
@@ -241,9 +239,8 @@ class App {
 
       const workflowRunId = workflowRun.id;
 
-      const {storage, artifactId} = await this.getWorkflowRunStorage(
-        workflowRunId
-      );
+      const {storage, artifactId} =
+        await this.getWorkflowRunStorage(workflowRunId);
 
       if (storage) {
         const {commentId, isReviewComment} = storage;
@@ -429,19 +426,6 @@ class App {
       await action();
     }
   }
-}
-
-function getConfig() {
-  const input = Object.fromEntries(
-    Object.keys(schema.describe().keys).map(item => [item, core.getInput(item)])
-  );
-
-  const {error, value} = schema.validate(input, {abortEarly: false});
-  if (error) {
-    throw error;
-  }
-
-  return value;
 }
 
 run();
