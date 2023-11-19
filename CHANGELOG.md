@@ -1,6 +1,18 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
+
+## [4.0.0](https://github.com/dessant/reaction-comments/compare/v3.0.0...v4.0.0) (2023-11-19)
+
+
+### ⚠ BREAKING CHANGES
+
+* the action now requires Node.js 20
+
+### Bug Fixes
+
+* retry and throttle GitHub API requests ([5c35d10](https://github.com/dessant/reaction-comments/commit/5c35d10027d40ecbad90b041ff2294d784fe1a31))
+* update dependencies ([a12ad49](https://github.com/dessant/reaction-comments/commit/a12ad495101d8ddc46e3c35a2a43d16c6da11d4b))
 
 ## [3.0.0](https://github.com/dessant/reaction-comments/compare/v2.2.0...v3.0.0) (2022-12-04)
 
