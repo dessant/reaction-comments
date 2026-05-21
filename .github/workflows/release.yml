@@ -19,3 +19,4 @@ jobs:
           name: ${{ github.ref_name }}
           body: >
             Learn more about this release from the [changelog](https://github.com/dessant/reaction-comments/blob/main/CHANGELOG.md#changelog).
+          draft: true
