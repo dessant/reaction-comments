@@ -1,6 +1,6 @@
-import core from '@actions/core';
-import github from '@actions/github';
-import artifact from '@actions/artifact';
+import {debug, info, setFailed, setOutput} from '@actions/core';
+import {context} from '@actions/github';
+import {DefaultArtifactClient} from '@actions/artifact';
 import {writeJson, remove} from 'fs-extra/esm';
 import dedent from 'dedent';
 import zip from 'adm-zip';
@@ -16,25 +16,25 @@ async function run() {
     const app = new App(config, client);
 
     let output;
-    if (github.context.eventName === 'schedule') {
+    if (['schedule', 'workflow_dispatch'].includes(context.eventName)) {
       output = await app.processScheduledComments();
     } else {
       output = await app.processNewComment();
     }
 
-    core.debug('Setting output (comments)');
+    debug('Setting output (comments)');
     if (output && output.length) {
-      core.setOutput('comments', JSON.stringify(output));
+      setOutput('comments', JSON.stringify(output));
 
       if (config['log-output']) {
-        core.info('Output (comments):');
-        core.info(JSON.stringify(output, null, 2));
+        info('Output (comments):');
+        info(JSON.stringify(output, null, 2));
       }
     } else {
-      core.setOutput('comments', '');
+      setOutput('comments', '');
     }
   } catch (err) {
-    core.setFailed(err);
+    setFailed(err);
   }
 }
 
@@ -45,7 +45,7 @@ class App {
   }
 
   async processNewComment() {
-    const payload = github.context.payload;
+    const payload = context.payload;
 
     if (payload.sender.type === 'Bot') {
       return;
@@ -76,8 +76,8 @@ class App {
       }
     }
 
-    const {owner, repo} = github.context.repo;
-    const issue = {owner, repo, issue_number: github.context.issue.number};
+    const {owner, repo} = context.repo;
+    const issue = {owner, repo, issue_number: context.issue.number};
 
     const commentId = payload.comment.id;
     const comment = {owner, repo, comment_id: commentId};
@@ -112,7 +112,7 @@ class App {
       </h6>
     `;
 
-      core.debug(`Editing comment (comment: ${commentId})`);
+      debug(`Editing comment (comment: ${commentId})`);
       try {
         await this.ensureUnlock(issue, lock, () =>
           (isReviewComment
@@ -138,7 +138,7 @@ class App {
 
       await this.setWorkflowRunStorage(storageContent);
     } else {
-      core.debug(`Deleting comment (comment: ${commentId})`);
+      debug(`Deleting comment (comment: ${commentId})`);
       try {
         await this.ensureUnlock(issue, lock, () =>
           (isReviewComment
@@ -165,14 +165,14 @@ class App {
   }
 
   async processScheduledComments() {
-    const {owner, repo} = github.context.repo;
+    const {owner, repo} = context.repo;
 
     const {
       data: {workflow_id: workflowId}
     } = await this.client.rest.actions.getWorkflowRun({
       owner,
       repo,
-      run_id: github.context.runId
+      run_id: context.runId
     });
 
     const {
@@ -251,9 +251,11 @@ class App {
         try {
           ({
             data: {body: commentBody}
-          } = await (isReviewComment
-            ? this.client.rest.pulls.getReviewComment
-            : this.client.rest.issues.getComment)(comment));
+          } = await (
+            isReviewComment
+              ? this.client.rest.pulls.getReviewComment
+              : this.client.rest.issues.getComment
+          )(comment));
         } catch (err) {
           if (err.status === 404) {
             await this.client.rest.actions.deleteArtifact({
@@ -283,7 +285,7 @@ class App {
             reason: issueData.active_lock_reason
           };
 
-          core.debug(`Deleting comment (comment: ${commentId})`);
+          debug(`Deleting comment (comment: ${commentId})`);
           await this.ensureUnlock(issue, lock, () =>
             (isReviewComment
               ? this.client.rest.pulls.deleteReviewComment
@@ -328,7 +330,7 @@ class App {
   }
 
   async getWorkflowRunStorage(runId) {
-    const {owner, repo} = github.context.repo;
+    const {owner, repo} = context.repo;
 
     const {
       data: {artifacts}
@@ -365,7 +367,7 @@ class App {
 
     await writeJson(storagePath, storageContent);
 
-    const artifactClient = artifact.create();
+    const artifactClient = new DefaultArtifactClient();
     const artifactName = 'storage';
     const artifactFiles = [storagePath];
     const artifactRootDirectory = '.';
@@ -374,7 +376,7 @@ class App {
       retentionDays: 60
     };
 
-    const uploadResult = await artifactClient.uploadArtifact(
+    await artifactClient.uploadArtifact(
       artifactName,
       artifactFiles,
       artifactRootDirectory,
@@ -382,10 +384,6 @@ class App {
     );
 
     await remove(storagePath);
-
-    if (uploadResult.failedItems.length) {
-      throw new Error('Artifact could not be uploaded');
-    }
   }
 
   async ensureUnlock(issue, lock, action) {
