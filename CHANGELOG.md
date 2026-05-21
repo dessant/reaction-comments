@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [5.0.0](https://github.com/dessant/reaction-comments/compare/v4.0.0...v5.0.0) (2026-05-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* the action now requires Node.js 24
+
+### Bug Fixes
+
+* update dependencies ([07ceefd](https://github.com/dessant/reaction-comments/commit/07ceefde790e58d592d2e1d52b16428a0adb0598))
+
 ## [4.0.0](https://github.com/dessant/reaction-comments/compare/v3.0.0...v4.0.0) (2023-11-19)
 
 
