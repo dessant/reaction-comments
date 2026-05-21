@@ -10,9 +10,9 @@ such as +1, and encourages the use of GitHub reactions.
 The continued development of Reaction Comments is made possible
 thanks to the support of awesome backers. If you'd like to join them,
 please consider contributing with
-[Patreon](https://armin.dev/go/patreon?pr=reaction-comments&src=repo),
-[PayPal](https://armin.dev/go/paypal?pr=reaction-comments&src=repo) or
-[Bitcoin](https://armin.dev/go/bitcoin?pr=reaction-comments&src=repo).
+[Patreon](https://go.vapps.dev/patreon?pr=reaction-comments&src=repo),
+[PayPal](https://go.vapps.dev/paypal?pr=reaction-comments&src=repo) or
+[Bitcoin](https://go.vapps.dev/bitcoin?pr=reaction-comments&src=repo).
 
 ## How It Works
 
@@ -29,7 +29,7 @@ directory, use one of the [example workflows](#examples) to get started.
 
 ### Inputs
 
-The action can be configured using [input parameters](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepswith).
+The action can be configured using [input parameters](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#jobsjob_idstepswith).
 
 <!-- prettier-ignore -->
 - **`github-token`**
@@ -99,7 +99,7 @@ jobs:
   action:
     runs-on: ubuntu-latest
     steps:
-      - uses: dessant/reaction-comments@v4
+      - uses: dessant/reaction-comments@v5
 ```
 
 ### Available input parameters
@@ -128,7 +128,7 @@ jobs:
   action:
     runs-on: ubuntu-latest
     steps:
-      - uses: dessant/reaction-comments@v4
+      - uses: dessant/reaction-comments@v5
         with:
           github-token: ${{ github.token }}
           exempt-issue-labels: ''
@@ -151,7 +151,7 @@ with the the `help` or `party-parrot` labels applied.
 <!-- prettier-ignore -->
 ```yaml
     steps:
-      - uses: dessant/reaction-comments@v4
+      - uses: dessant/reaction-comments@v5
         with:
           exempt-issue-labels: 'help, party-parrot'
           process-only: 'issues'
@@ -163,7 +163,7 @@ with the `pinned` label applied.
 <!-- prettier-ignore -->
 ```yaml
     steps:
-      - uses: dessant/reaction-comments@v4
+      - uses: dessant/reaction-comments@v5
         with:
           exempt-pr-labels: 'pinned'
           process-only: 'prs'
@@ -178,7 +178,7 @@ on issues and pull requests.
 <!-- prettier-ignore -->
 ```yaml
     steps:
-      - uses: dessant/reaction-comments@v4
+      - uses: dessant/reaction-comments@v5
         with:
           issue-comment: ''
           pr-comment: ''
@@ -191,22 +191,22 @@ You may also authenticate with a personal access token to perform actions
 as a GitHub user instead of the `github-actions` app.
 
 Create a [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic)
-with the `repo` or `public_repo` scopes enabled, and add the token as an
-[encrypted secret](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository)
+with the `repo` or `public_repo` scopes enabled, and add the token as a
+[secret](https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets#creating-secrets-for-a-repository)
 for the repository or organization, then provide the action with the secret
 using the `github-token` input parameter.
 
 <!-- prettier-ignore -->
 ```yaml
     steps:
-      - uses: dessant/reaction-comments@v4
+      - uses: dessant/reaction-comments@v5
         with:
           github-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 ```
 
 ## License
 
-Copyright (c) 2018-2023 Armin Sebastian
+Copyright (c) 2018-2026 Armin Sebastian
 
 This software is released under the terms of the MIT License.
 See the [LICENSE](LICENSE) file for further information.
