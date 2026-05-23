@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [5.0.1](https://github.com/dessant/reaction-comments/compare/v5.0.0...v5.0.1) (2026-05-23)
+
+
+### Bug Fixes
+
+* update github-token validation schema ([b9c5980](https://github.com/dessant/reaction-comments/commit/b9c5980f49b476d0787c69f241623e963882ba7c))
+
 ## [5.0.0](https://github.com/dessant/reaction-comments/compare/v4.0.0...v5.0.0) (2026-05-21)
 
 
